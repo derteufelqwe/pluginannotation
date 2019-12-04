@@ -1,9 +1,14 @@
 package de.derteufelqwe.AutoPluginProcessor.testfiles;
 
 
+import de.derteufelqwe.AutoPluginProcessor.annotations.MCAPIVersion;
+import de.derteufelqwe.AutoPluginProcessor.annotations.MCAuthor;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
-@MCPlugin(pluginName = "TestPlugin", srcPath = "src/test/java/", resourcePath = "src/test/resources/")
-public class TestPlugin {
+@MCAPIVersion("1.123")
+@MCAuthor({"Arne", "Nicht Arne"})
+@MCPlugin(pluginName = "TestPlugin", version = "1.14", srcPath = "src/test/java/", resourcePath = "src/test/resources/")
+public class TestPlugin extends JavaPlugin {
 
 }

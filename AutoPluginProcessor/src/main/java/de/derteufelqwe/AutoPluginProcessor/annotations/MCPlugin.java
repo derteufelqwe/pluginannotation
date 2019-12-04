@@ -6,6 +6,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface MCPlugin {
     String pluginName();
+    String version();
     String srcPath() default "src/main/java/";
     String resourcePath() default "src/main/resources/";
 }

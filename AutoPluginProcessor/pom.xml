@@ -25,6 +25,15 @@
     </build>
 
 
+    <repositories>
+        <!-- This adds the Spigot Maven repository to the build -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.auto.service/auto-service -->
         <dependency>
@@ -68,6 +77,13 @@
             <artifactId>compile-testing</artifactId>
             <version>0.15</version>
             <scope>test</scope>
+        </dependency>
+
+        <!--This adds the Spigot API artifact to the build -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>LATEST</version>
         </dependency>
 
     </dependencies>

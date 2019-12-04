@@ -1,2 +1,4 @@
 .idea/*
-^X
+
+AutoPluginProcessor/target/*
+AutoPluginTestPlugin/target/*
