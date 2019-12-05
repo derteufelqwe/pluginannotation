@@ -1,4 +1,4 @@
-package de.derteufelqwe.AutoPluginProcessor;
+package de.derteufelqwe.AutoPluginProcessor.exceptions;
 
 import javax.lang.model.element.Element;
 

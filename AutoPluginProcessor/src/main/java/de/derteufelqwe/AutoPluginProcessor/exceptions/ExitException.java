@@ -1,4 +1,4 @@
-package de.derteufelqwe.AutoPluginProcessor;
+package de.derteufelqwe.AutoPluginProcessor.exceptions;
 
 public class ExitException extends RuntimeException {
 
