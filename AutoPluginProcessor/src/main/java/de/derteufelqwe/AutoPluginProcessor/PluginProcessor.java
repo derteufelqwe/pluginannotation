@@ -53,7 +53,6 @@ public class PluginProcessor extends AbstractProcessor {
         set.add(MCLoad.class.getCanonicalName());
         set.add(MCLoadBefore.class.getCanonicalName());
         set.add(MCSoftDepend.class.getCanonicalName());
-        set.add(MCCommand.class.getCanonicalName());
 
         return set;
     }
@@ -77,6 +76,8 @@ public class PluginProcessor extends AbstractProcessor {
         } catch (IOException e) {
             error(null, String.format("IOException while setting up config: %s", e.getMessage()));
         }
+
+        return;
 
     }
 
@@ -105,9 +106,6 @@ public class PluginProcessor extends AbstractProcessor {
 
             MCLoadBeforeParser mcLoadBeforeParser = new MCLoadBeforeParser(roundEnv, messager);
             pluginConfigMap.putAll(mcLoadBeforeParser.parse());
-
-            MCCommandParser mcCommandParser = new MCCommandParser(roundEnv, messager);
-            pluginConfigMap.putAll(mcCommandParser.parse());
 
         } catch (ExitException e1) {
         } catch (ProcessingException e2) {
