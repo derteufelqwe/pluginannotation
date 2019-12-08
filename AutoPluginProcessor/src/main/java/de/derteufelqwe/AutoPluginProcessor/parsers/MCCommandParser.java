@@ -37,8 +37,10 @@ public class MCCommandParser extends Parser {
     @Override
     public Map<String, Object> parse() throws ProcessingException {
         Map<String, Object> map = new HashMap<>();
+        Map<String, Object> result = super.parse();
 
-        map.put("commands", super.parse());
+        if (result.size() != 0)
+            map.put("commands", result);
 
         return map;
     }

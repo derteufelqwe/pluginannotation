@@ -57,7 +57,7 @@ public class Validator {
         List<String> interfaces = typeElement.getInterfaces().stream().map(i -> ((TypeMirror) i).toString()).collect(Collectors.toList());
 
         if (!interfaces.contains(CommandExecutor.class.getName()))
-            throw new ValidationException(element, String.format("@%s annotated classes need to extend %s. Source: %s",
+            throw new ValidationException(element, String.format("@%s annotated classes need to implement %s. Source: %s",
                     clazz.getSimpleName(), CommandExecutor.class.getSimpleName(), element.toString()));
 
         return true;

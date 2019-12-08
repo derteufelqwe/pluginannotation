@@ -1,11 +1,12 @@
 package de.derteufelqwe.AutoPluginProcessor.parsers;
 
-import com.sun.tools.javac.code.Symbol;
+
 import de.derteufelqwe.AutoPluginProcessor.Config;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
 import org.yaml.snakeyaml.Yaml;
+import sun.awt.Symbol;
 
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -81,13 +84,23 @@ public class MCPluginParser extends Parser {
         return map;
     }
 
-
+    // ToDo: Diese dumme Scheiße muss weg.
     private File getResourceFile(Element element, String srcPath, String resourcePath, String relativePath) {
-        String fullPath = ((Symbol.ClassSymbol) element).sourcefile.getName();
+        Field field = null;
+        String fullPath = "";
+        try {
+            field = element.getClass().getField("sourcefile");
+            field.setAccessible(true);
+            fullPath = (String) field.get(element).getClass().getMethod("getName").invoke(field.get(element));
+        } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        }
+
         int pos = fullPath.replace('\\', '/').indexOf(srcPath);
         if (pos == -1) {
             throw new ProcessingException(String.format("Can't parse annotation for %s. Did you forget to set srcPath or resourcePath?",
-                    ((Symbol.ClassSymbol) element).className()));
+                    element.toString()));
         }
 
         String mainPath = fullPath.substring(0, pos);
