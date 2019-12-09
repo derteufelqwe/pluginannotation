@@ -7,14 +7,15 @@ import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.Types;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MCDependParser extends Parser {
 
-    public MCDependParser(RoundEnvironment roundEnv, Messager messager) {
-        super(roundEnv, messager, MCDepend.class);
+    public MCDependParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
+        super(roundEnv, messager, MCDepend.class, typeUtils);
     }
 
 

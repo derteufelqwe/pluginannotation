@@ -7,9 +7,12 @@ import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Parser {
@@ -19,19 +22,35 @@ public abstract class Parser {
     protected Validator validator;
     protected Messager messager;
 
-    private Map<String, Object> configMap = new HashMap<>();
+    private Map<String, Object> configMap = new HashMap<>();    // Contents of the YamlConfig ?
 
-    public Parser(RoundEnvironment roundEnv, Messager messager, Class<? extends Annotation> annotationClass) {
+
+    public Parser(RoundEnvironment roundEnv, Messager messager, Class<? extends Annotation> annotationClass, Types typeUtils) {
         this.roundEnv = roundEnv;
         this.messager = messager;
         this.annotationClass = annotationClass;
 
-        this.validator = new Validator(annotationClass);
+        this.validator = new Validator(annotationClass, typeUtils);
+    }
+
+
+    /**
+     * Returns a List of all valid elements.
+     */
+    public List<Element> getElements() {
+        List<Element> elements = new ArrayList<>();
+
+        for (Element element : roundEnv.getElementsAnnotatedWith(annotationClass)) {
+            if (validate(element)) {
+                elements.add(element);
+            }
+        }
+
+        return elements;
     }
 
     public Map<String, Object> parse() throws ProcessingException {
-        for (Element element : roundEnv.getElementsAnnotatedWith(annotationClass)) {
-            validate(element);
+        for (Element element : getElements()) {
             configMap.putAll(singleParse(element));
         }
 

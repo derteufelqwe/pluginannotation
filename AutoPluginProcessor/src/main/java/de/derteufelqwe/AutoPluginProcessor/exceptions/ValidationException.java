@@ -16,5 +16,9 @@ public class ValidationException extends ProcessingException {
         super(element, message);
     }
 
+    public ValidationException(Element element, String message, Object... args) {
+        super(element, String.format(message, args));
+    }
+
 
 }

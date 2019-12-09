@@ -7,6 +7,8 @@ import de.derteufelqwe.AutoPluginProcessor.annotations.MCAPIVersion;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.Types;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,8 +17,8 @@ import java.util.Map;
  */
 public class MCAPIVersionParser extends Parser {
 
-    public MCAPIVersionParser(RoundEnvironment roundEnv, Messager messager) {
-        super(roundEnv, messager, MCAPIVersion.class);
+    public MCAPIVersionParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
+        super(roundEnv, messager, MCAPIVersion.class, typeUtils);
     }
 
 

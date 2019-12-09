@@ -6,11 +6,11 @@ import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
 import org.yaml.snakeyaml.Yaml;
-import sun.awt.Symbol;
 
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.Types;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,8 +28,8 @@ public class MCPluginParser extends Parser {
 
     private Yaml yaml;
 
-    public MCPluginParser(RoundEnvironment roundEnv, Messager messager, Yaml yaml) {
-        super(roundEnv, messager, MCPlugin.class);
+    public MCPluginParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils, Yaml yaml) {
+        super(roundEnv, messager, MCPlugin.class, typeUtils);
         this.yaml = yaml;
 
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(MCPlugin.class);

@@ -7,14 +7,15 @@ import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.Types;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MCCommandParser extends Parser {
 
 
-    public MCCommandParser(RoundEnvironment roundEnv, Messager messager) {
-        super(roundEnv, messager, MCCommand.class);
+    public MCCommandParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
+        super(roundEnv, messager, MCCommand.class, typeUtils);
     }
 
     @Override
@@ -48,6 +49,23 @@ public class MCCommandParser extends Parser {
     @Override
     protected boolean validate(Element element) throws ValidationException {
         return validator.onCommandExecutor(element);
+    }
+
+    public Map<String, String> getCommandMap() {
+        Map<String, String> resMap = new HashMap<>();
+
+        for (Element element : getElements()) {
+            String cmdName = element.getAnnotation(MCCommand.class).command();
+            String clazz = element.toString();
+            if (resMap.containsKey(cmdName)) {
+                throw new ProcessingException("Found multiple classes with '%s' command. Class %s and %s.",
+                        cmdName, resMap.get(cmdName), clazz);
+            } else {
+                resMap.put(cmdName, clazz);
+            }
+        }
+
+        return resMap;
     }
 
 }

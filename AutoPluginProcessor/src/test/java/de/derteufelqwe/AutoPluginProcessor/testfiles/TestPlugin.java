@@ -14,4 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 @MCPlugin(pluginName = "TestPlugin", version = "1.14", srcPath = "src/test/java/", resourcePath = "src/test/resources/")
 public class TestPlugin extends JavaPlugin {
 
+    @Override
+    public void onEnable() {
+
+    }
 }
