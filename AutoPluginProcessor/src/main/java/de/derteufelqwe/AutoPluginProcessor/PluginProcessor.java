@@ -4,6 +4,8 @@ import com.google.auto.service.AutoService;
 import com.sun.tools.javac.processing.JavacFiler;
 import de.derteufelqwe.AutoPluginProcessor.annotations.*;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
+import de.derteufelqwe.AutoPluginProcessor.misc.AutoRegisterGenerator;
+import de.derteufelqwe.AutoPluginProcessor.misc.Config;
 import de.derteufelqwe.AutoPluginProcessor.parsers.*;
 import de.derteufelqwe.AutoPluginProcessor.processors.BetterProcessor;
 import org.yaml.snakeyaml.DumperOptions;
@@ -38,6 +40,7 @@ public class PluginProcessor extends BetterProcessor {
         set.add(MCLoad.class.getCanonicalName());
         set.add(MCLoadBefore.class.getCanonicalName());
         set.add(MCSoftDepend.class.getCanonicalName());
+        set.add(MCPermission.class.getCanonicalName());
 
         set.add(MCCommand.class.getCanonicalName());
         set.add(MCTabComplete.class.getCanonicalName());
@@ -111,7 +114,7 @@ public class PluginProcessor extends BetterProcessor {
     private Yaml getYAML() {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        options.setIndent(4);
+        options.setIndent(2);
         options.setPrettyFlow(true);
 
         return new Yaml(options);

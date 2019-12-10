@@ -1,6 +1,6 @@
 package de.derteufelqwe.AutoPluginProcessor.parsers;
 
-import de.derteufelqwe.AutoPluginProcessor.Validator;
+import de.derteufelqwe.AutoPluginProcessor.misc.Validator;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 

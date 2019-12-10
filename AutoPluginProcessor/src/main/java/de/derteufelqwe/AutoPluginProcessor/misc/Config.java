@@ -1,4 +1,4 @@
-package de.derteufelqwe.AutoPluginProcessor;
+package de.derteufelqwe.AutoPluginProcessor.misc;
 
 public class Config {
 

@@ -5,5 +5,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 public @interface MCAuthor {
-    String[] value();
+    String[] value() default "";
+    String website() default "";
 }

@@ -1,11 +1,10 @@
-package de.derteufelqwe.AutoPluginProcessor;
+package de.derteufelqwe.AutoPluginProcessor.misc;
 
 import com.squareup.javapoet.*;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCCommandParser;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCListenerParser;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCTabCompletParser;
-import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;

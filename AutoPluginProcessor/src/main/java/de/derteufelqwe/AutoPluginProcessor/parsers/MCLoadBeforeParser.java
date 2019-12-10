@@ -10,9 +10,14 @@ import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class MCLoadBeforeParser extends Parser {
+
+    private final Pattern dependNamePattern = Pattern.compile("[a-z,A-Z,0-9,_]+");
+
 
     public MCLoadBeforeParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
         super(roundEnv, messager, MCLoadBefore.class, typeUtils);
@@ -24,7 +29,15 @@ public class MCLoadBeforeParser extends Parser {
         Map<String, Object> map = new HashMap<>();
         MCLoadBefore annotation = element.getAnnotation(MCLoadBefore.class);
 
-        map.put("loadbefore", Arrays.asList(annotation.value()));
+        List<String> dependencys = Arrays.asList(annotation.value());
+
+        for (String dep : dependencys) {
+            if (!dependNamePattern.matcher(dep).matches())
+                throw new ValidationException(element, "Soft-depend has faulty dependency '%s'. Source: %s",
+                        dep, element);
+        }
+
+        map.put("loadbefore", dependencys);
 
         return map;
     }

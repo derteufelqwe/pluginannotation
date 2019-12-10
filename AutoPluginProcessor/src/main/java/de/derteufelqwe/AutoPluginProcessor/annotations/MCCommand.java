@@ -9,4 +9,5 @@ public @interface MCCommand {
     String description() default "";
     String permission() default "";
     String permissionMessage() default "";
+    String usage() default "";
 }

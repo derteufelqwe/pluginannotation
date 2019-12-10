@@ -1,4 +1,4 @@
-package de.derteufelqwe.AutoPluginProcessor;
+package de.derteufelqwe.AutoPluginProcessor.misc;
 
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;

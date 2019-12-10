@@ -24,7 +24,12 @@ public class MCAuthorParser extends Parser {
     @Override
     protected Map<String, Object> singleParse(Element element) throws ProcessingException {
         Map<String, Object> map = new HashMap<>();
-        map.put("authors", Arrays.asList(element.getAnnotation(MCAuthor.class).value()));
+        MCAuthor annotation = element.getAnnotation(MCAuthor.class);
+
+        if (!Arrays.asList(annotation.value()).get(0).equals(""))
+            map.put("authors", Arrays.asList(annotation.value()));
+        if (!annotation.website().equals(""))
+            map.put("website", annotation.website());
 
         return map;
     }

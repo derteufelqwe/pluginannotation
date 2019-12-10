@@ -10,8 +10,10 @@ import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class MCLoadParser extends Parser {
+
 
     public MCLoadParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
         super(roundEnv, messager, MCLoad.class, typeUtils);
@@ -23,7 +25,7 @@ public class MCLoadParser extends Parser {
         Map<String, Object> map = new HashMap<>();
         MCLoad annotation = element.getAnnotation(MCLoad.class);
 
-        map.put("load", annotation.value());
+        map.put("load", annotation.value().toString());
 
         return map;
     }

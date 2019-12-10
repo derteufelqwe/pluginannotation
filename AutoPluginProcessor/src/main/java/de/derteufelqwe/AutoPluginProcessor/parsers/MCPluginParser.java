@@ -1,7 +1,7 @@
 package de.derteufelqwe.AutoPluginProcessor.parsers;
 
 
-import de.derteufelqwe.AutoPluginProcessor.Config;
+import de.derteufelqwe.AutoPluginProcessor.misc.Config;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
@@ -20,11 +20,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Parses all {@Link MCPlugin} Annotations
  */
 public class MCPluginParser extends Parser {
+
+    private final Pattern namePattern = Pattern.compile("[a-z,A-Z,0-9,_]+");
 
     private Yaml yaml;
 
@@ -57,9 +60,18 @@ public class MCPluginParser extends Parser {
             error(element, String.format("IOException while parsing %s. Exception: %s", element.toString(), e.getMessage()));
         }
 
-        map.put("name", annotation.pluginName());
+        if (!namePattern.matcher(annotation.name()).matches())
+            throw new ValidationException(element, "PluginName '%s' does not match name-criteria. Source: %s",
+                    annotation.name(), element.toString());
+
+        map.put("name", annotation.name());
         map.put("version", annotation.version());
         map.put("main", element.toString());
+
+        if (!annotation.description().equals(""))
+            map.put("description", annotation.description());
+        if (!annotation.prefix().equals(""))
+            map.put("prefix", annotation.prefix());
 
         return map;
     }
@@ -80,6 +92,9 @@ public class MCPluginParser extends Parser {
             map = yaml.load(fr);
             fr.close();
         }
+
+        if (map == null)
+            map = new HashMap<>();
 
         return map;
     }

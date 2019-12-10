@@ -10,8 +10,11 @@ import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class MCCommandParser extends Parser {
+
+    private final Pattern cmdPattern = Pattern.compile("^(?!\\/).+");
 
 
     public MCCommandParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
@@ -24,11 +27,17 @@ public class MCCommandParser extends Parser {
         Map<String, Object> subCfgMap = new HashMap<>();
         MCCommand annotation = element.getAnnotation(MCCommand.class);
 
+        if (!cmdPattern.matcher(annotation.command()).matches())
+            throw new ValidationException(element, "Command '%s' contains invalid characters. Source: %s",
+                    annotation.command(), element.toString());
+
         subCfgMap.put("description", annotation.description());
         if (!annotation.permission().equals(""))
             subCfgMap.put("permission", annotation.permission());
         if (!annotation.permissionMessage().equals(""))
             subCfgMap.put("permission-message", annotation.permissionMessage());
+        if (!annotation.usage().equals(""))
+            subCfgMap.put("usage", annotation.usage());
 
         map.put(annotation.command(), subCfgMap);
 
