@@ -20,6 +20,7 @@ public class MCTabCompletParser extends Parser {
         super(roundEnv, messager, MCTabComplete.class, typeUtils);
     }
 
+
     @Override
     protected Map<String, Object> singleParse(Element element) throws ProcessingException {
         return null;

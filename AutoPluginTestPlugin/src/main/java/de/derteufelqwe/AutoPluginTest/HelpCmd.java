@@ -8,6 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import java.util.List;
+
 @MCTabComplete("myhelp")
 @MCCommand(command = "myhelp")
 public class HelpCmd implements CommandExecutor, TabCompleter {
@@ -18,5 +20,10 @@ public class HelpCmd implements CommandExecutor, TabCompleter {
         commandSender.sendMessage(ChatColor.GOLD + "This is your help.");
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        return null;
     }
 }

@@ -38,7 +38,10 @@ public class PluginProcessor extends BetterProcessor {
         set.add(MCLoad.class.getCanonicalName());
         set.add(MCLoadBefore.class.getCanonicalName());
         set.add(MCSoftDepend.class.getCanonicalName());
+
         set.add(MCCommand.class.getCanonicalName());
+        set.add(MCTabComplete.class.getCanonicalName());
+        set.add(MCPlugin.class.getCanonicalName());
 
         return set;
     }
@@ -85,7 +88,7 @@ public class PluginProcessor extends BetterProcessor {
         MCCommandParser mcCommandParser = new MCCommandParser(roundEnv, messager, typeUtils);
         yamlContent.putAll(mcCommandParser.parse());
 
-        CommandRegisterGenerator cmdGen = new CommandRegisterGenerator(roundEnv, messager, typeUtils, filer, annotations.size());
+        AutoRegisterGenerator cmdGen = new AutoRegisterGenerator(roundEnv, messager, typeUtils, filer, annotations.size());
         cmdGen.generateClass();
 
         return true;

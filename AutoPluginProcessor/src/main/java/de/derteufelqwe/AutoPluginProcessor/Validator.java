@@ -4,6 +4,7 @@ import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.lang.model.element.Element;
@@ -71,7 +72,20 @@ public class Validator {
 
         if (!transitiveInterfaceCheck(typeElement, TabCompleter.class))
             throw new ValidationException(element, "@%s annotated classes need to implement %s. Source: %s",
-                    clazz.getSimpleName(), CommandExecutor.class.getSimpleName(), element.toString());
+                    clazz.getSimpleName(), TabCompleter.class.getSimpleName(), element.toString());
+
+        return true;
+    }
+
+
+    public boolean onListener(Element element) {
+        if (!onClass(element))
+            return false;
+        TypeElement typeElement = (TypeElement) element;
+
+        if (!transitiveInterfaceCheck(typeElement, Listener.class))
+            throw new ValidationException(element, "@%s annotated classes need to implement %s. Source: %s",
+                    clazz.getSimpleName(), Listener.class.getSimpleName(), element.toString());
 
         return true;
     }
