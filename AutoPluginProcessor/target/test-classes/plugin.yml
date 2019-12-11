@@ -1,3 +1,27 @@
-name: Plugin1
-main: de.derteufelqwe.AutoPluginProcessor.Plugins.Plugin1
-version: 1.2.3
+api-version: '1.14'
+website: www.example.com
+depend:
+- Plugin1
+prefix: Prefix
+loadbefore:
+- Plugin1
+- Plugin2
+description: Test-Description
+main: de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin3
+version: Aktuelle Version
+soft-depend:
+- Plugin2
+load: STARTUP
+name: Plugin3
+commands:
+  cmd1:
+    description: ''
+  cmd2:
+    usage: /cmd2
+    description: Ich bin ein command
+    permission: cmd2.use
+    permission-message: No permission
+  cmd3:
+    description: ''
+authors:
+- Single Author

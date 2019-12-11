@@ -1,0 +1,14 @@
+depend:
+  - Plugin1
+load: STARTUP
+prefix: Prefix
+loadbefore:
+  - Plugin1
+  - Plugin2
+name: Plugin3
+main: de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin3
+version: Aktuelle Version
+soft-depend:
+  - Plugin2
+authors:
+  - Single Author

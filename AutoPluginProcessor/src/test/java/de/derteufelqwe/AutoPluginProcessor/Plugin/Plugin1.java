@@ -1,4 +1,4 @@
-package de.derteufelqwe.AutoPluginProcessor.Plugins;
+package de.derteufelqwe.AutoPluginProcessor.Plugin;
 
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
 import org.bukkit.command.CommandExecutor;
