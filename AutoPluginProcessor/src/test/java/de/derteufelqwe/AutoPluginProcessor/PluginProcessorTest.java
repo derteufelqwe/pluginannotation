@@ -1,28 +1,25 @@
 package de.derteufelqwe.AutoPluginProcessor;
 
-import com.google.common.base.Utf8;
-import com.google.testing.compile.*;
+import com.google.testing.compile.Compilation;
+import com.google.testing.compile.CompilationSubject;
 import com.google.testing.compile.Compiler;
-import de.derteufelqwe.AutoPluginProcessor.Command.Command1;
-import de.derteufelqwe.AutoPluginProcessor.Command.Command2;
-import de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin1;
-import de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin2;
-import de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin3;
+import com.google.testing.compile.JavaFileObjects;
 import org.junit.Before;
 import org.junit.Test;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.google.common.truth.Truth.assertAbout;
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
-import static com.google.common.truth.Truth.*;
 
 // https://github.com/guhilling/java-metamodel-generator/blob/master/processor/src/test/java/de/hilling/lang/metamodel/MetamodelGeneratorTest.java
 // https://github.com/google/compile-testing/blob/master/src/test/java/com/google/testing/compile/JavaSourcesSubjectFactoryTest.java#L100
@@ -37,53 +34,6 @@ public class PluginProcessorTest {
         compiler = Compiler.javac().withProcessors(new PluginProcessor());
     }
 
-    /**
-     * Tests following classes:
-     *  - MCPlugin - without description
-     */
-    @Test
-    public void testPlugin() {
-        TestResult testResult = basicTest("testfiles/Plugin1.yml", Plugin1.class);
-        assertThat(testResult.isResult());
-    }
-
-    /**
-     * Tests following classes:
-     *  - MCPlugin - with description
-     *  - MCAPIVersion
-     *  - MCAuthor
-     *  - Website
-     */
-    @Test
-    public void testOnPlugin1() {
-        TestResult testResult = basicTest("testfiles/Plugin2.yml", Plugin2.class);
-        assertThat(testResult.isResult());
-    }
-
-    /**
-     * Tests following classes:
-     *  - MCPlugin
-     *  - MCDepend
-     *  - MCSoftDepend
-     *  - MCLoad
-     *  - MCLoadBefore
-     */
-    @Test
-    public void testOnPlugin2() {
-        TestResult testResult = basicTest("testfiles/Plugin3.yml", Plugin3.class);
-        assertThat(testResult.isResult());
-    }
-
-    /**
-     * Tests following classes:
-     *  - MCCommand basic usage
-     *  - MCCommand with optional parameter
-     */
-    @Test
-    public void testCommand1() {
-        TestResult testResult = basicTest("testfiles/Plugin3.yml", Command1.class, Command2.class);
-
-    }
 
     @Test
     public void test() {
@@ -98,14 +48,41 @@ public class PluginProcessorTest {
         assertAbout(CompilationSubject.compilations()).that(compilation)
                 .generatedFile(StandardLocation.SOURCE_OUTPUT, "plugin.yml")
                 .contentsAsUtf8String().isEqualTo(yaml.dump(resourceToYaml("testfiles/Command1.yml")))
-                ;
+        ;
+
+    }
+
+    /**
+     * Tests the following:
+     * - MCPlugin - working, minimal
+     */
+    @Test
+    public void testPluginWorking1() {
+        JavaFileObject file = resourceToJFO("testsources/Plugin/", "Plugin1");
+        Compilation compilation = compiler.compile(file);
+
+        assertAbout(CompilationSubject.compilations()).that(compilation)
+                .succeededWithoutWarnings();
+
+        assertAbout(CompilationSubject.compilations()).that(compilation)
+                .generatedFile(StandardLocation.SOURCE_OUTPUT, "plugin.yml")
+                .contentsAsUtf8String().isEqualTo(resourceToString("testfiles/Plugin/Plugin1.yml"));
+    }
+
+
+    /**
+     * Tests the following:
+     * - MCPlugin - working, maximal
+     */
+    @Test
+    public void testPluginWorking2() {
 
     }
 
 
     @Test
     public void printCompileOutput() {
-        Compilation compilation = compiler.compile(TestUtils.source(Command1.class), TestUtils.source(Command2.class));
+        Compilation compilation = compiler.compile(TestUtils.source(TestUtils.class));
 
         List<JavaFileObject> files = compilation.generatedFiles().stream().filter(f -> f.getKind() != JavaFileObject.Kind.CLASS)
                 .collect(Collectors.toList());
@@ -196,6 +173,9 @@ public class PluginProcessorTest {
     }
 
     private JavaFileObject resourceToJFO(String path, String fileName) {
+        if (fileName.endsWith(".java"))
+            throw new RuntimeException("FileName can't end with .java");
+
         File file = new File("src/test/resources/" + path + fileName + ".java");
 
         if (!file.exists())
@@ -207,6 +187,28 @@ public class PluginProcessorTest {
             return JavaFileObjects.forSourceLines("test." + fileName, lines);
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String resourceToString(String fileName) {
+        File file = new File("src/test/resources/" + fileName);
+        StringBuilder builder = new StringBuilder();
+        String str;
+
+        if (!file.exists())
+            return null;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            while ((str = bufferedReader.readLine()) != null) {
+                builder.append(str).append("\n");
+            }
+            bufferedReader.close();
+
+            return builder.toString();
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }

@@ -28,7 +28,7 @@
     <orderEntry type="library" name="Maven: com.squareup:javapoet:1.11.1" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.25" level="project" />
-    <orderEntry type="library" name="Maven: org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.spigotmc:spigot-api:1.15-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: net.md-5:bungeecord-chat:1.13-SNAPSHOT" level="project" />
@@ -39,9 +39,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.google.truth.extensions:truth-java8-extension:0.37" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.auto.value:auto-value:1.5.3" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: com.sun:tools:11.0.3">
+      <library name="Maven: com.sun:tools:1.8.0_152-release">
         <CLASSES>
-          <root url="jar://C:/Program Files/Java/jdk1.8.0_231/lib/tools.jar!/" />
+          <root url="jar://C:/MySoftware/Java/JDK/lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

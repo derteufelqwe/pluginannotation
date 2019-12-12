@@ -1,0 +1,3 @@
+name: Plugin1
+main: de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin1
+version: 1.2.3

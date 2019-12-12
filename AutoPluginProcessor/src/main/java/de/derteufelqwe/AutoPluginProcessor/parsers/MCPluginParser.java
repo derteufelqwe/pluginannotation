@@ -87,7 +87,7 @@ public class MCPluginParser extends Parser {
         Map<String, Object> map = new HashMap<>();
         File resourceFile = getResourceFile(element, annotation.srcPath(), annotation.resourcePath(), Config.CONFIG_FILE_NAME);
 
-        if (resourceFile.exists()) {
+        if (resourceFile != null && resourceFile.exists()) {
             Reader fr = new FileReader(resourceFile);
             map = yaml.load(fr);
             fr.close();
@@ -114,8 +114,9 @@ public class MCPluginParser extends Parser {
 
         int pos = fullPath.replace('\\', '/').indexOf(srcPath);
         if (pos == -1) {
-            throw new ProcessingException(String.format("Can't parse annotation for %s. Did you forget to set srcPath or resourcePath?",
-                    element.toString()));
+//            throw new ProcessingException(String.format("Can't parse annotation for %s. Did you forget to set srcPath or resourcePath?",
+//                    element.toString()));
+            return null;
         }
 
         String mainPath = fullPath.substring(0, pos);

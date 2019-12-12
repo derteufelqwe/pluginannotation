@@ -4,11 +4,11 @@ load: STARTUP
 prefix: Prefix
 loadbefore:
   - Plugin1
-  - Plugin2
+  - Plugin2.java
 name: Plugin3
 main: de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin3
 version: Aktuelle Version
 soft-depend:
-  - Plugin2
+  - Plugin2.java
 authors:
   - Single Author
