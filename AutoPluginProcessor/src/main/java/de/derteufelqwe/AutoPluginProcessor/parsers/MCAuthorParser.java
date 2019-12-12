@@ -36,6 +36,6 @@ public class MCAuthorParser extends Parser {
 
     @Override
     protected boolean validate(Element element) throws ValidationException {
-        return validator.onJavaPlugin(element) && validator.onMCPlugin(element);
+        return validator.onMCPlugin(element);
     }
 }

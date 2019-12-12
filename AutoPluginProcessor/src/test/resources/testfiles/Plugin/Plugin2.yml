@@ -1,0 +1,19 @@
+api-version: '1.12'
+depend:
+  - Dependency1
+  - Dependency2
+load: STARTUP
+prefix: Prefix2
+loadbefore:
+  - LoadBefore1
+  - LoadBefore2
+description: Description2
+name: Plugin2
+main: de.derteufelqwe.AutoPluginProcessor.Plugin.Plugin2
+version: 1.2.3
+soft-depend:
+  - SoftDepend1
+  - SoftDepend2
+authors:
+  - Author1
+  - Author2

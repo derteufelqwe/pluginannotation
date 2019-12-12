@@ -32,7 +32,7 @@ public class MCDependParser extends Parser {
 
         for (String dep : dependencys) {
             if (!dependNamePattern.matcher(dep).matches())
-                throw new ValidationException(element, "Depend has faulty dependency '%s'. Source: %s",
+                throw new ValidationException(element, "Depend has faulty dependency name '%s'. Source: %s",
                         dep, element);
         }
 

@@ -1,0 +1,6 @@
+commands:
+  Command2:
+    usage: /Command2
+    description: Description1
+    permission: permission1
+    permission-message: permission-message

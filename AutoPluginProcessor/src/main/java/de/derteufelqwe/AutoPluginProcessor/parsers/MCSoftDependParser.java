@@ -32,7 +32,7 @@ public class MCSoftDependParser extends Parser {
 
         for (String dep : dependencys) {
             if (!dependNamePattern.matcher(dep).matches())
-                throw new ValidationException(element, "Soft-depend has faulty dependency '%s'. Source: %s",
+                throw new ValidationException(element, "SoftDepend has faulty dependency name '%s'. Source: %s",
                         dep, element);
         }
 

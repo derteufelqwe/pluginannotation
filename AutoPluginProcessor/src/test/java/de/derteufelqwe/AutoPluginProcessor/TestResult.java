@@ -21,6 +21,12 @@ public class TestResult {
         this.result = result;
     }
 
+
+    public String getGeneratedFile() {
+        return TestUtils.JFOToString(otherFiles.get(0));
+    }
+
+
     public List<JavaFileObject> getAllFiles() {
         return allFiles;
     }

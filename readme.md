@@ -20,6 +20,20 @@
 | commands | MCCommands |
 | permissions | MCPermissions |
 
+| Annotation        | Can be applied to |
+| ------------- |:-------------|
+| MCPlugin | JavaPlugin |
+| MCAPIVersion | MCPlugin |
+| MCAuthor | MCPlugin |
+| MCDepend | MCPlugin |
+| MCLoad | MCPlugin |
+| MCLoadBefore | MCPlugin |
+| MCSoftDepend | MCPlugin |
+| MCCommand | CommandExecutor |
+| MCListener | Listener |
+| MCTabComplete | TabCompleter |
+| MCPermission | Anywhere |
+
 # Template
 The AutoPluginProcessor will detect if you have a plugin.yml in your resources folder
 and uses this as a startingpoint. Annotations will have a higher priority and will

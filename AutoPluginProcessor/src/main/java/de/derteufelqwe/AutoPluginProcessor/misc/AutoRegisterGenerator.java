@@ -134,7 +134,9 @@ public class AutoRegisterGenerator {
         // Save to File
         cmdGenClass.addMethod(genMethodBuilder.build());
 
-        JavaFile javaFile = JavaFile.builder("de.derteufelqwe.AutoPlugin", cmdGenClass.build()).build();
+        JavaFile javaFile = JavaFile.builder("de.derteufelqwe.AutoPlugin", cmdGenClass.build())
+                .indent("    ")
+                .build();
         try {
             javaFile.writeTo(filer);
         } catch (IOException e) {
