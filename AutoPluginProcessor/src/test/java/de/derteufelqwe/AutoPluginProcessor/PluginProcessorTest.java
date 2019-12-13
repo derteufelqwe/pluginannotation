@@ -194,8 +194,6 @@ public class PluginProcessorTest {
         JavaFileObject file = resourceToJFO(TEST_SOURCES_FOLDER + "Plugin/", "Plugin11");
         Compilation compilation = compiler.compile(file);
 
-        System.out.println(compilation.errors());
-
         assertAbout(CompilationSubject.compilations()).that(compilation)
                 .hadErrorContaining("LoadBefore has faulty dependency name");
     }
@@ -353,35 +351,23 @@ public class PluginProcessorTest {
 
         assertAbout(CompilationSubject.compilations()).that(compilation)
                 .generatedFile(StandardLocation.SOURCE_OUTPUT, AUTOREGISTER_PACKAGE, AUTOREGISTER_FILE)
-                .contentsAsUtf8String().isEqualTo(resourceToString(TEST_FILES_FOLDER + "Listener/Listener1.java"));
+                .contentsAsUtf8String().isEqualTo(resourceToString(TEST_FILES_FOLDER + "Listener/AutoRegister1.java"));
+    }
+
+    /**
+     * Tests the following:
+     *  - MCListener - not on Listener
+     */
+    @Test
+    public void testMCListenerNotWorking() {
+        Compilation compilation = compiler.compile(resourceToJFO(TEST_SOURCES_FOLDER + "Listener/", "Listener2"));
+
+        assertAbout(CompilationSubject.compilations()).that(compilation)
+                .hadErrorContaining("@MCListener annotated classes");
     }
 
 
-
-
-
-//    @Test
-//    public void printCompileOutput() {
-//        Compilation compilation = compiler.compile(TestUtils.source(TestUtils.class));
-//
-//        List<JavaFileObject> files = compilation.generatedFiles().stream().filter(f -> f.getKind() != JavaFileObject.Kind.CLASS)
-//                .collect(Collectors.toList());
-//
-//        List<JavaFileObject> sourceFiles = files.stream().filter(f -> f.getKind() == JavaFileObject.Kind.SOURCE)
-//                .collect(Collectors.toList());
-//
-//        List<JavaFileObject> otherFiles = files.stream().filter(f -> f.getKind() == JavaFileObject.Kind.OTHER)
-//                .collect(Collectors.toList());
-//
-//
-//        assertEquals(sourceFiles.size(), 1);
-//        assertEquals(otherFiles.size(), 1);
-//
-//        System.out.println(TestUtils.JFOToString(otherFiles.get(0)));
-//    }
-
-
-    // ----------  Non-Tests  ----------
+    // ----------  Non-tests  ----------
 
     private TestResult basicTest(String outputFileName, String resourcePath, String... fileName) {
         Compilation compilation = compiler.compile(Arrays.stream(fileName)

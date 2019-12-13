@@ -45,6 +45,7 @@ public class PluginProcessor extends BetterProcessor {
         set.add(MCCommand.class.getCanonicalName());
         set.add(MCTabComplete.class.getCanonicalName());
         set.add(MCPlugin.class.getCanonicalName());
+        set.add(MCListener.class.getCanonicalName());
 
         return set;
     }

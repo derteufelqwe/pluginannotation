@@ -80,8 +80,10 @@ public class AutoRegisterGenerator {
 
     public void generateClass() {
         // Used to skip all rounds where nothing needs to be generated.
-        if (annotationSize == 0)
+        if (annotationSize == 0) {
+//            this.messager.printMessage(Diagnostic.Kind.WARNING, "Skipping");
             return;
+        }
 
         Map<String, Pair<ClassName, ClassName>> commands = getParsedCommandMap();
         List<ClassName> listeners = getParsedListeners();
