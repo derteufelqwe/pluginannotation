@@ -22,8 +22,6 @@ public abstract class Parser {
     protected Validator validator;
     protected Messager messager;
 
-    private Map<String, Object> configMap = new HashMap<>();    // Contents of the YamlConfig ?
-
 
     public Parser(RoundEnvironment roundEnv, Messager messager, Class<? extends Annotation> annotationClass, Types typeUtils) {
         this.roundEnv = roundEnv;
@@ -50,6 +48,8 @@ public abstract class Parser {
     }
 
     public Map<String, Object> parse() throws ProcessingException {
+        Map<String, Object> configMap = new HashMap<>();
+
         for (Element element : getElements()) {
             configMap.putAll(singleParse(element));
         }
@@ -60,6 +60,10 @@ public abstract class Parser {
     protected abstract Map<String, Object> singleParse(Element element) throws ProcessingException;
 
     protected abstract boolean validate(Element element) throws ValidationException;
+
+    public void addContent(Map<String, Object> destination) {
+        destination.putAll(this.parse());
+    }
 
 
     protected void note(Element element, String msg) {

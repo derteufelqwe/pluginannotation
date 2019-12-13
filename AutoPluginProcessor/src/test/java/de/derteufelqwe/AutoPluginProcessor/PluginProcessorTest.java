@@ -329,6 +329,8 @@ public class PluginProcessorTest {
         assertAbout(CompilationSubject.compilations()).that(result.getCompilation())
                 .succeededWithoutWarnings();
 
+        if (!result.isResult())
+            System.out.println(result.getGeneratedFile());
         assertTrue("Generated plugin.yml is incorrect.", result.isResult());
 
         assertAbout(CompilationSubject.compilations()).that(result.getCompilation())

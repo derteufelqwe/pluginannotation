@@ -15,7 +15,9 @@ import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.*;
 
@@ -58,6 +60,14 @@ public class PluginProcessor extends BetterProcessor {
     @Override
     public void setup() {
         try {
+            try {
+                FileObject fileObject = filer.getResource(StandardLocation.SOURCE_OUTPUT, "", fileName);
+                Reader reader = fileObject.openReader(true);
+                yamlContent = yaml.load(reader);
+                reader.close();
+                fileObject.delete();
+            } catch (FileNotFoundException ignored) {}
+
             outputFile = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", fileName);
         } catch (IOException e) {
             throw new ProcessingException("Failed to create resource %s: %s", fileName, e.getMessage());
@@ -69,28 +79,28 @@ public class PluginProcessor extends BetterProcessor {
     public boolean safeProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
         MCPluginParser mcPluginParser = new MCPluginParser(roundEnv, messager, typeUtils, yaml);
-        yamlContent.putAll(mcPluginParser.parse());
+        mcPluginParser.addContent(yamlContent);
 
         MCAuthorParser mcAuthorParser = new MCAuthorParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcAuthorParser.parse());
+        mcAuthorParser.addContent(yamlContent);
 
         MCAPIVersionParser mcapiVersionParser = new MCAPIVersionParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcapiVersionParser.parse());
+        mcapiVersionParser.addContent(yamlContent);
 
         MCDependParser mcDependParser = new MCDependParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcDependParser.parse());
+        mcDependParser.addContent(yamlContent);
 
         MCSoftDependParser mcSoftDependParser = new MCSoftDependParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcSoftDependParser.parse());
+        mcSoftDependParser.addContent(yamlContent);
 
         MCLoadParser mcLoadParser = new MCLoadParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcLoadParser.parse());
+        mcLoadParser.addContent(yamlContent);
 
         MCLoadBeforeParser mcLoadBeforeParser = new MCLoadBeforeParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcLoadBeforeParser.parse());
+        mcLoadBeforeParser.addContent(yamlContent);
 
         MCCommandParser mcCommandParser = new MCCommandParser(roundEnv, messager, typeUtils);
-        yamlContent.putAll(mcCommandParser.parse());
+        mcCommandParser.addContent(yamlContent);
 
         AutoRegisterGenerator cmdGen = new AutoRegisterGenerator(roundEnv, messager, typeUtils, filer, annotations.size());
         cmdGen.generateClass();

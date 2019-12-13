@@ -45,14 +45,16 @@ public class MCCommandParser extends Parser {
     }
 
     @Override
-    public Map<String, Object> parse() throws ProcessingException {
-        Map<String, Object> map = new HashMap<>();
-        Map<String, Object> result = super.parse();
+    public void addContent(Map<String, Object> destination) {
+        Map<String, Object> cmdMap = destination.keySet().contains("commands") ? (Map<String, Object>) destination.get("commands") : new HashMap<>();
+        Map<String, Object> parsedData = super.parse();
 
-        if (result.size() != 0)
-            map.put("commands", result);
+        for (String key : parsedData.keySet()) {
+            cmdMap.put(key, parsedData.get(key));
+        }
 
-        return map;
+        if (cmdMap.size() != 0)
+            destination.put("commands", cmdMap);
     }
 
     @Override
