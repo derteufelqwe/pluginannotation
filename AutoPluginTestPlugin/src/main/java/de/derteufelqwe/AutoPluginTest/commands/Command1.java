@@ -1,4 +1,4 @@
-package de.derteufelqwe.AutoPluginTest;
+package de.derteufelqwe.AutoPluginTest.commands;
 
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCCommand;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCTabComplete;

@@ -76,6 +76,11 @@ public class PluginProcessor extends BetterProcessor {
     }
 
     @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        return super.process(annotations, roundEnv);
+    }
+
+    @Override
     public boolean safeProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
         MCPluginParser mcPluginParser = new MCPluginParser(roundEnv, messager, typeUtils, yaml);

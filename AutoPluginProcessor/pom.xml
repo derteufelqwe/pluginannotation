@@ -17,11 +17,34 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.2</version>
                 <configuration>
-                    <compilerArgs>-proc:none</compilerArgs>
+                    <!--<compilerArgs>-proc:none</compilerArgs>-->
+                    <!--<annotationProcessors>-->
+                        <!--<annotationProcessor>lombok.core.AnnotationProcessor</annotationProcessor>-->
+                    <!--</annotationProcessors>-->
+                    <includes>
+                        <include>de/**</include>
+                    </includes>
+
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok-version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>**</directory>
+                <excludes>
+                    <exclude>cache.json</exclude>
+                </excludes>
+            </resource>
+        </resources>
     </build>
 
 
