@@ -19,8 +19,8 @@ public class MCLoadBeforeParser extends Parser {
     private final Pattern dependNamePattern = Pattern.compile("[a-z,A-Z,0-9,_]+");
 
 
-    public MCLoadBeforeParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCLoadBefore.class, typeUtils);
+    public MCLoadBeforeParser(Parser.Data data) {
+        super(data, MCLoadBefore.class);
     }
 
 

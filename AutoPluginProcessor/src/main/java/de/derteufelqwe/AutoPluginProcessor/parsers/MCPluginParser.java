@@ -31,8 +31,8 @@ public class MCPluginParser extends Parser {
 
     private Yaml yaml;
 
-    public MCPluginParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils, Yaml yaml) {
-        super(roundEnv, messager, MCPlugin.class, typeUtils);
+    public MCPluginParser(Parser.Data data, Yaml yaml) {
+        super(data, MCPlugin.class);
         this.yaml = yaml;
 
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(MCPlugin.class);

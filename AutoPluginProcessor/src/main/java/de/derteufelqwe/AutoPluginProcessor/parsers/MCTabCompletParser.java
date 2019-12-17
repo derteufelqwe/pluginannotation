@@ -16,8 +16,8 @@ public class MCTabCompletParser extends Parser {
 
 
 
-    public MCTabCompletParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCTabComplete.class, typeUtils);
+    public MCTabCompletParser(Parser.Data data) {
+        super(data, MCTabComplete.class);
     }
 
 

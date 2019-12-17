@@ -19,8 +19,8 @@ public class MCSoftDependParser extends Parser {
     private final Pattern dependNamePattern = Pattern.compile("[a-z,A-Z,0-9,_]+");
 
 
-    public MCSoftDependParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCSoftDepend.class, typeUtils);
+    public MCSoftDependParser(Parser.Data data) {
+        super(data, MCSoftDepend.class);
     }
 
 

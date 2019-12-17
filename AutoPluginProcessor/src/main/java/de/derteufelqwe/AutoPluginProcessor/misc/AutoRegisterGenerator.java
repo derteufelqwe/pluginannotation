@@ -11,6 +11,7 @@ import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCCommandParser;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCListenerParser;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCTabCompletParser;
+import de.derteufelqwe.AutoPluginProcessor.parsers.Parser;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
@@ -45,13 +46,13 @@ public class AutoRegisterGenerator {
     private int annotationSize = 0;
 
 
-    public AutoRegisterGenerator(RoundEnvironment roundEnv, Messager messager, Types typeUtils, Filer filer, int annotationSize) {
-        this.mcCommandParser = new MCCommandParser(roundEnv, messager, typeUtils);
-        this.mcTabCompletParser = new MCTabCompletParser(roundEnv, messager, typeUtils);
-        this.mcListenerParser = new MCListenerParser(roundEnv, messager, typeUtils);
+    public AutoRegisterGenerator(Parser.Data data, Filer filer, int annotationSize) {
+        this.mcCommandParser = new MCCommandParser(data);
+        this.mcTabCompletParser = new MCTabCompletParser(data);
+        this.mcListenerParser = new MCListenerParser(data);
 
-        this.roundEnv = roundEnv;
-        this.messager = messager;
+        this.roundEnv = data.roundEnv;
+        this.messager = data.messager;
         this.filer = filer;
         this.annotationSize = annotationSize;
     }

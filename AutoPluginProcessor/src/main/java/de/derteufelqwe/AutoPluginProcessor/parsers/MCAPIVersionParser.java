@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class MCAPIVersionParser extends Parser {
 
-    public MCAPIVersionParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCAPIVersion.class, typeUtils);
+    public MCAPIVersionParser(Parser.Data data) {
+        super(data, MCAPIVersion.class);
     }
 
 

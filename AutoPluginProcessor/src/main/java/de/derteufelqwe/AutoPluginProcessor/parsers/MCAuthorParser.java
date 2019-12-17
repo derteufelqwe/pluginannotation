@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class MCAuthorParser extends Parser {
 
-    public MCAuthorParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCAuthor.class, typeUtils);
+    public MCAuthorParser(Parser.Data data) {
+        super(data, MCAuthor.class);
     }
 
     @Override

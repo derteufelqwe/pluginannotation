@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
 public class MCLoadParser extends Parser {
 
 
-    public MCLoadParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCLoad.class, typeUtils);
+    public MCLoadParser(Parser.Data data) {
+        super(data, MCLoad.class);
     }
 
 

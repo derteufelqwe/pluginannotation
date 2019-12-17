@@ -15,8 +15,8 @@ import java.util.Map;
 public class MCListenerParser extends Parser {
 
 
-    public MCListenerParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCListener.class, typeUtils);
+    public MCListenerParser(Parser.Data data) {
+        super(data, MCListener.class);
     }
 
 

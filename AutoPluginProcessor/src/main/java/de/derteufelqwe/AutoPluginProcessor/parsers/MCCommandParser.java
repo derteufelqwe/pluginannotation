@@ -17,8 +17,8 @@ public class MCCommandParser extends Parser {
     private final Pattern cmdPattern = Pattern.compile("^(?!\\/).+");
 
 
-    public MCCommandParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCCommand.class, typeUtils);
+    public MCCommandParser(Parser.Data data) {
+        super(data, MCCommand.class);
     }
 
     @Override

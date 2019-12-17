@@ -23,12 +23,12 @@ public abstract class Parser {
     protected Messager messager;
 
 
-    public Parser(RoundEnvironment roundEnv, Messager messager, Class<? extends Annotation> annotationClass, Types typeUtils) {
-        this.roundEnv = roundEnv;
-        this.messager = messager;
+    public Parser(Data constructorData, Class<? extends Annotation> annotationClass) {
+        this.roundEnv = constructorData.roundEnv;
+        this.messager = constructorData.messager;
         this.annotationClass = annotationClass;
 
-        this.validator = new Validator(annotationClass, typeUtils);
+        this.validator = new Validator(annotationClass, constructorData.typeUtils);
     }
 
 
@@ -78,4 +78,25 @@ public abstract class Parser {
         messager.printMessage(Diagnostic.Kind.ERROR, msg, element);
     }
 
+
+    // ---------  Parser-Data  ---------
+
+
+    public static class Data {
+
+        public RoundEnvironment roundEnv;
+        public Messager messager;
+        public Types typeUtils;
+        public List<Element> additionalElements;
+
+
+        public Data(RoundEnvironment roundEnv, Messager messager, Types typeUtils, List<Element> additionalElements) {
+            this.roundEnv = roundEnv;
+            this.messager = messager;
+            this.typeUtils = typeUtils;
+            this.additionalElements = additionalElements;
+        }
+
+
+    }
 }

@@ -57,7 +57,7 @@ public abstract class BetterProcessor extends AbstractProcessor {
                 try {
                     setup();
                 } catch (Exception e) {
-                    error(e.getMessage());
+                    error("Setup-Exception: " + e.getMessage());
                 }
                 didSetup = true;
             }
@@ -76,7 +76,7 @@ public abstract class BetterProcessor extends AbstractProcessor {
             try {
                 this.finish();
             } catch (Exception e) {
-                error(e.getMessage());
+                error("Finish-Exception: " + e.getMessage());
             }
         }
 

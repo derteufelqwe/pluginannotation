@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class MCPermissionParser extends Parser {
 
-    public MCPermissionParser(RoundEnvironment roundEnv, Messager messager, Types typeUtils) {
-        super(roundEnv, messager, MCPermission.class, typeUtils);
+    public MCPermissionParser(Parser.Data data) {
+        super(data, MCPermission.class);
     }
 
     @Override

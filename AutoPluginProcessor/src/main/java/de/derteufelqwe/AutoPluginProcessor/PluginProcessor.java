@@ -77,40 +77,44 @@ public class PluginProcessor extends BetterProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        System.out.println("d");
         return super.process(annotations, roundEnv);
     }
 
     @Override
     public boolean safeProcess(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        List<Element> list = new ArrayList<>();
+            list.add(elementUtils.getTypeElement("de.derteufelqwe.AutoPluginTest.Listener2"));
+        Parser.Data data = new Parser.Data(roundEnv, messager, typeUtils, list);
 
-        MCPluginParser mcPluginParser = new MCPluginParser(roundEnv, messager, typeUtils, yaml);
+        MCPluginParser mcPluginParser = new MCPluginParser(data, yaml);
         mcPluginParser.addContent(yamlContent);
 
-        MCAuthorParser mcAuthorParser = new MCAuthorParser(roundEnv, messager, typeUtils);
+        MCAuthorParser mcAuthorParser = new MCAuthorParser(data);
         mcAuthorParser.addContent(yamlContent);
 
-        MCAPIVersionParser mcapiVersionParser = new MCAPIVersionParser(roundEnv, messager, typeUtils);
+        MCAPIVersionParser mcapiVersionParser = new MCAPIVersionParser(data);
         mcapiVersionParser.addContent(yamlContent);
 
-        MCDependParser mcDependParser = new MCDependParser(roundEnv, messager, typeUtils);
+        MCDependParser mcDependParser = new MCDependParser(data);
         mcDependParser.addContent(yamlContent);
 
-        MCSoftDependParser mcSoftDependParser = new MCSoftDependParser(roundEnv, messager, typeUtils);
+        MCSoftDependParser mcSoftDependParser = new MCSoftDependParser(data);
         mcSoftDependParser.addContent(yamlContent);
 
-        MCLoadParser mcLoadParser = new MCLoadParser(roundEnv, messager, typeUtils);
+        MCLoadParser mcLoadParser = new MCLoadParser(data);
         mcLoadParser.addContent(yamlContent);
 
-        MCLoadBeforeParser mcLoadBeforeParser = new MCLoadBeforeParser(roundEnv, messager, typeUtils);
+        MCLoadBeforeParser mcLoadBeforeParser = new MCLoadBeforeParser(data);
         mcLoadBeforeParser.addContent(yamlContent);
 
-        MCCommandParser mcCommandParser = new MCCommandParser(roundEnv, messager, typeUtils);
+        MCCommandParser mcCommandParser = new MCCommandParser(data);
         mcCommandParser.addContent(yamlContent);
 
-        AutoRegisterGenerator cmdGen = new AutoRegisterGenerator(roundEnv, messager, typeUtils, filer, annotations.size());
+        AutoRegisterGenerator cmdGen = new AutoRegisterGenerator(data, filer, annotations.size());
         cmdGen.generateClass();
 
-        return true;
+        return false;
     }
 
 
