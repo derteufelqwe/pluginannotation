@@ -33,7 +33,7 @@ public class MCListenerParser extends Parser {
     public List<String> getListeners() {
         List<String> resList = new ArrayList<>();
 
-        for (Element element : getElements()) {
+        for (Element element : getElementsWithCache()) {
             resList.add(element.toString());
         }
 

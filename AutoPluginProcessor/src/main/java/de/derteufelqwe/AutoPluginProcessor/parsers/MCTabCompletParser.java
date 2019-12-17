@@ -34,7 +34,7 @@ public class MCTabCompletParser extends Parser {
     public Map<String, String> getCompleterMap() {
         Map<String, String> resMap = new HashMap<>();
 
-        for (Element element : getElements()) {
+        for (Element element : getElementsWithCache()) {
             String cmdName = element.getAnnotation(MCTabComplete.class).value();
             String clazz = element.toString();
             if (resMap.containsKey(cmdName)) {

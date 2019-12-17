@@ -65,7 +65,7 @@ public class MCCommandParser extends Parser {
     public Map<String, String> getCommandMap() {
         Map<String, String> resMap = new HashMap<>();
 
-        for (Element element : getElements()) {
+        for (Element element : getElementsWithCache()) {
             String cmdName = element.getAnnotation(MCCommand.class).command();
             String clazz = element.toString();
             if (resMap.containsKey(cmdName)) {

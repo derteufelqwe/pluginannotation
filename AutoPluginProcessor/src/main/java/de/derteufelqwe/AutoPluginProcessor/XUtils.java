@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
 
-public class TestUtils {
+public class XUtils {
 
     /**
      * Ssssshhhht. Be quiet.

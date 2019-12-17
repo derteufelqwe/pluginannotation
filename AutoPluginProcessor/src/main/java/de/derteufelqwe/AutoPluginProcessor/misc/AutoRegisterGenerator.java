@@ -1,12 +1,6 @@
 package de.derteufelqwe.AutoPluginProcessor.misc;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.*;
-import com.sun.tools.javac.processing.JavacFiler;
-import de.derteufelqwe.AutoPluginProcessor.cache.Cache;
-import de.derteufelqwe.AutoPluginProcessor.cache.ClassNameDeserializer;
-import de.derteufelqwe.AutoPluginProcessor.cache.ClassNameSerializer;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCCommandParser;
 import de.derteufelqwe.AutoPluginProcessor.parsers.MCListenerParser;
@@ -19,12 +13,8 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-import javax.tools.FileObject;
-import javax.tools.JavaFileManager;
-import javax.tools.StandardLocation;
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -32,13 +22,10 @@ public class AutoRegisterGenerator {
 
     private final String CLASS_NAME = "AutoRegister";
     private final String GENERATE_METHOD_NAME = "register";
-    private final String CACHE_FILENAME = "cache.json";
-    private final JavaFileManager.Location CACHE_LOCATION = StandardLocation.SOURCE_OUTPUT;
 
     private MCCommandParser mcCommandParser;
     private MCTabCompletParser mcTabCompletParser;
     private MCListenerParser mcListenerParser;
-    private Gson gson = getGson();
 
     private Messager messager;
     private Filer filer;
@@ -58,52 +45,13 @@ public class AutoRegisterGenerator {
     }
 
 
-    private Gson getGson() {
-        GsonBuilder builder = new GsonBuilder()
-                .disableHtmlEscaping()
-                .setPrettyPrinting()
-                .registerTypeAdapter(ClassName.class, new ClassNameSerializer())
-                .registerTypeAdapter(ClassName.class, new ClassNameDeserializer())
-                ;
-
-        return builder.create();
-    }
-
-
-    private Cache getCache() {
-        try {
-            FileObject file = filer.getResource(CACHE_LOCATION, "", CACHE_FILENAME);
-            Reader reader = file.openReader(true);
-            Cache cache = gson.fromJson(reader, Cache.class);
-            file.delete();
-            ((JavacFiler) filer).close();
-            return cache;
-        } catch (IOException e) {
-            return new Cache();
-        }
-    }
-
-
-    private void saveCache(Cache data) {
-        try {
-            FileObject file = filer.createResource(CACHE_LOCATION, "", CACHE_FILENAME);
-            Writer writer = file.openWriter();
-            gson.toJson(data, writer);
-            writer.close();
-            ((JavacFiler) filer).close();
-        } catch (IOException e) {
-            throw new ProcessingException("Failed to save the cache file.");
-        }
-    }
-
-
     private Map<String, Pair<ClassName, ClassName>> getParsedCommandMap() {
         Map<String, Pair<ClassName, ClassName>> resMap = new HashMap<>();
         Map<String, String> cmdMap = this.mcCommandParser.getCommandMap();
         Map<String, String> completerMap = this.mcTabCompletParser.getCompleterMap();
         Set<String> keySet = new HashSet<>();
-            keySet.addAll(cmdMap.keySet());
-            keySet.addAll(completerMap.keySet());
+        keySet.addAll(cmdMap.keySet());
+        keySet.addAll(completerMap.keySet());
 
         for (String key : keySet) {
             Pair<String, String> clazz1 = splitClass(cmdMap.get(key));
@@ -137,26 +85,8 @@ public class AutoRegisterGenerator {
             return;
         }
 
-        // Load the cache of files to generate, fuse it with the changed files and save it.
-        Cache loadedCache = this.getCache();
-
-        Map<String, Pair<ClassName, ClassName>> commands = loadedCache.getCommands();
-        Map<String, Pair<ClassName, ClassName>> newCommands = getParsedCommandMap();
-
-        for (String key : newCommands.keySet()) {
-            if (commands.keySet().contains(key)) {
-                commands.get(key).first = newCommands.get(key).first == null ? commands.get(key).first : newCommands.get(key).first;
-                commands.get(key).second = newCommands.get(key).second == null ? commands.get(key).second : newCommands.get(key).second;
-
-            } else {
-                commands.put(key, newCommands.get(key));
-            }
-        }
-
-        List<ClassName> listeners = loadedCache.getListeners();
-        listeners.addAll(getParsedListeners());
-
-        this.saveCache(new Cache(commands, listeners));
+        Map<String, Pair<ClassName, ClassName>> commands = getParsedCommandMap();
+        List<ClassName> listeners = getParsedListeners();
 
 
         // Method setup
@@ -190,7 +120,7 @@ public class AutoRegisterGenerator {
                 genMethodBuilder.addStatement("plugin.getServer().getPluginCommand($S).setExecutor(new $T())", key, executor);
                 genMethodBuilder.addStatement("plugin.getServer().getPluginCommand($S).setTabCompleter(new $T())", key, completer);
 
-            } else if (completer == null && executor != null){
+            } else if (completer == null && executor != null) {
                 genMethodBuilder.addStatement("plugin.getServer().getPluginCommand($S).setExecutor(new $T())", key, executor);
 
             } else if (completer != null && executor == null) {

@@ -1,22 +1,27 @@
 package de.derteufelqwe.AutoPluginProcessor.parsers;
 
 
+import com.sun.tools.javac.processing.JavacFiler;
 import de.derteufelqwe.AutoPluginProcessor.misc.Config;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ProcessingException;
 import de.derteufelqwe.AutoPluginProcessor.exceptions.ValidationException;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
 import org.yaml.snakeyaml.Yaml;
 
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -28,11 +33,13 @@ import java.util.regex.Pattern;
 public class MCPluginParser extends Parser {
 
     private final Pattern namePattern = Pattern.compile("[a-z,A-Z,0-9,_]+");
+    private Filer filer;
 
     private Yaml yaml;
 
-    public MCPluginParser(Parser.Data data, Yaml yaml) {
+    public MCPluginParser(Parser.Data data, Filer filer, Yaml yaml) {
         super(data, MCPlugin.class);
+        this.filer = filer;
         this.yaml = yaml;
 
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(MCPlugin.class);
@@ -55,9 +62,11 @@ public class MCPluginParser extends Parser {
         MCPlugin annotation = element.getAnnotation(MCPlugin.class);
 
         try {
-            map.putAll(generateBasePluginYML(element));
+            Map<String, Object> base = generateBasePluginYML(element);
+//            throw new ProcessingException("Base: " + base.toString());
+            map.putAll(base);
         } catch (IOException e) {
-            error(element, String.format("IOException while parsing %s. Exception: %s", element.toString(), e.getMessage()));
+            throw new ProcessingException("IOException while parsing %s. Exception: %s", element.toString(), e.getMessage());
         }
 
         if (!namePattern.matcher(annotation.name()).matches())
@@ -85,16 +94,22 @@ public class MCPluginParser extends Parser {
     private Map<String, Object> generateBasePluginYML(Element element) throws IOException {
         MCPlugin annotation = element.getAnnotation(MCPlugin.class);
         Map<String, Object> map = new HashMap<>();
-        File resourceFile = getResourceFile(element, annotation.srcPath(), annotation.resourcePath(), Config.CONFIG_FILE_NAME);
+//        File resourceFile = getResourceFile(element, annotation.srcPath(), annotation.resourcePath(), Config.CONFIG_FILE_NAME);
+//
+//        if (resourceFile != null && resourceFile.exists()) {
+//            Reader fr = new FileReader(resourceFile);
+//            map = yaml.load(fr);
+//            fr.close();
+//        }
+//
+//        if (map == null)
+//            map = new HashMap<>();
 
-        if (resourceFile != null && resourceFile.exists()) {
-            Reader fr = new FileReader(resourceFile);
-            map = yaml.load(fr);
-            fr.close();
-        }
-
-        if (map == null)
-            map = new HashMap<>();
+        FileObject fileObject = filer.getResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml");
+        Reader reader = fileObject.openReader(true);
+        map = (Map<String, Object>) yaml.loadAs(reader, Map.class);
+        reader.close();
+        ((JavacFiler) filer).close();
 
         return map;
     }
@@ -106,7 +121,9 @@ public class MCPluginParser extends Parser {
         try {
             field = element.getClass().getField("sourcefile");
             field.setAccessible(true);
-            fullPath = (String) field.get(element).getClass().getMethod("getName").invoke(field.get(element));
+            Method method = field.get(element).getClass().getMethod("getName");
+            method.setAccessible(true);
+            fullPath = (String) method.invoke(field.get(element));
         } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
             return null;

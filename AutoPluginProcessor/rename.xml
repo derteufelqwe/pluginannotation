@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>rename</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <files>
+        <file>
+            <source>src/main/resources/config.yml</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>config2.yml</destName>
+        </file>
+<!--        <file>-->
+<!--            <source>src/main/resources/something.properties</source>-->
+<!--            <outputDirectory>/</outputDirectory>-->
+<!--            <destName>something_en.properties</destName>-->
+<!--        </file>-->
+    </files>
+</assembly>

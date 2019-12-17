@@ -10,10 +10,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Parser {
 
@@ -21,12 +18,14 @@ public abstract class Parser {
     protected Class<? extends Annotation> annotationClass;
     protected Validator validator;
     protected Messager messager;
+    protected Set<Element> cachedElements;
 
 
     public Parser(Data constructorData, Class<? extends Annotation> annotationClass) {
         this.roundEnv = constructorData.roundEnv;
         this.messager = constructorData.messager;
         this.annotationClass = annotationClass;
+        this.cachedElements = constructorData.additionalElements;
 
         this.validator = new Validator(annotationClass, constructorData.typeUtils);
     }
@@ -47,10 +46,28 @@ public abstract class Parser {
         return elements;
     }
 
+    /**
+     * Returns a list of all valid elements from the current run and the cache.
+     */
+    public List<Element> getElementsWithCache() {
+        List<Element> base = getElements();
+
+        for (Element e : cachedElements) {
+            if (!base.contains(e)) {
+                if (e.getAnnotation(annotationClass) != null) {
+                    base.add(e);
+                }
+            }
+        }
+
+        return base;
+    }
+
+
     public Map<String, Object> parse() throws ProcessingException {
         Map<String, Object> configMap = new HashMap<>();
 
-        for (Element element : getElements()) {
+        for (Element element : getElementsWithCache()) {
             configMap.putAll(singleParse(element));
         }
 
@@ -87,10 +104,10 @@ public abstract class Parser {
         public RoundEnvironment roundEnv;
         public Messager messager;
         public Types typeUtils;
-        public List<Element> additionalElements;
+        public Set<Element> additionalElements;
 
 
-        public Data(RoundEnvironment roundEnv, Messager messager, Types typeUtils, List<Element> additionalElements) {
+        public Data(RoundEnvironment roundEnv, Messager messager, Types typeUtils, Set<Element> additionalElements) {
             this.roundEnv = roundEnv;
             this.messager = messager;
             this.typeUtils = typeUtils;

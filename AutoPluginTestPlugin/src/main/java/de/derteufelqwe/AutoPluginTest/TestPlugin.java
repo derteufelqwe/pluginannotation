@@ -1,6 +1,6 @@
 package de.derteufelqwe.AutoPluginTest;
 
-import de.derteufelqwe.AutoPlugin.AutoRegister;
+//import de.derteufelqwe.AutoPlugin.AutoRegister;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCAPIVersion;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCAuthor;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
@@ -16,6 +16,6 @@ public class TestPlugin extends JavaPlugin {
     public void onEnable() {
 
 
-        new AutoRegister().register(this);
+//        new AutoRegister().register(this);
     }
 }
