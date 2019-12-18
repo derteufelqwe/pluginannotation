@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.Yaml;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -49,15 +50,15 @@ public class PluginProcessorTest {
      */
     @Test
     public void testPluginWorking1() {
-        JavaFileObject file = resourceToJFO("testsources/Plugin/", "Plugin1");
+        JavaFileObject file = resourceToJFO(TEST_SOURCES_FOLDER + "/Plugin/", "Plugin1");
         Compilation compilation = compiler.compile(file);
 
         assertAbout(CompilationSubject.compilations()).that(compilation)
                 .succeededWithoutWarnings();
 
         assertAbout(CompilationSubject.compilations()).that(compilation)
-                .generatedFile(StandardLocation.SOURCE_OUTPUT, "plugin.yml")
-                .contentsAsUtf8String().isEqualTo(resourceToString("testfiles/Plugin/Plugin1.yml"));
+                .generatedFile(StandardLocation.CLASS_OUTPUT, "plugin.yml")
+                .contentsAsUtf8String().isEqualTo(resourceToString(TEST_FILES_FOLDER + "Plugin/Plugin1.yml"));
     }
 
     /**
@@ -379,8 +380,11 @@ public class PluginProcessorTest {
         List<JavaFileObject> allFiles = getNonClassFiles(compilation);
         List<JavaFileObject> sourceFiles = getSourceFiles(compilation);
         List<JavaFileObject> otherFiles = getOtherFiles(compilation);
+        List<JavaFileObject> otherClassFiles = new ArrayList<>(otherFiles).stream()
+                .filter(f -> f.toUri().toString().startsWith("mem:///CLASS_OUTPUT"))
+                .collect(Collectors.toList());
 
-        Map<String, Object> ymlContent = fileToYaml(otherFiles.get(0));
+        Map<String, Object> ymlContent = fileToYaml(otherClassFiles.get(0));
         Map<String, Object> referenceContent = resourceToYaml(TEST_FILES_FOLDER + outputFileName);
 
         if (referenceContent == null)

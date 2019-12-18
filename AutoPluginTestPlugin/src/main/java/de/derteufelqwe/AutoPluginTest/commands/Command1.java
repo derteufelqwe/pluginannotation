@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@MCTabComplete("cmd1")
-@MCCommand(command = "cmd1", description = "Command 1")
+//@MCTabComplete("cmd1")
+//@MCCommand(command = "cmd1", description = "Command 2")
 public class Command1 implements CommandExecutor, TabCompleter {
 
     @Override

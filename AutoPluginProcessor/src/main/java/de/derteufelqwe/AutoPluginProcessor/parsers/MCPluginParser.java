@@ -62,11 +62,11 @@ public class MCPluginParser extends Parser {
         MCPlugin annotation = element.getAnnotation(MCPlugin.class);
 
         try {
-            Map<String, Object> base = generateBasePluginYML(element);
-//            throw new ProcessingException("Base: " + base.toString());
+            Map<String, Object> base = generateBasePluginYML();
             map.putAll(base);
         } catch (IOException e) {
-            throw new ProcessingException("IOException while parsing %s. Exception: %s", element.toString(), e.getMessage());
+            throw new ProcessingException("" +
+                    "IOException while parsing %s. Exception: %s", element.toString(), e.getMessage());
         }
 
         if (!namePattern.matcher(annotation.name()).matches())
@@ -91,54 +91,23 @@ public class MCPluginParser extends Parser {
     }
 
 
-    private Map<String, Object> generateBasePluginYML(Element element) throws IOException {
-        MCPlugin annotation = element.getAnnotation(MCPlugin.class);
+    private Map<String, Object> generateBasePluginYML() throws IOException {
         Map<String, Object> map = new HashMap<>();
-//        File resourceFile = getResourceFile(element, annotation.srcPath(), annotation.resourcePath(), Config.CONFIG_FILE_NAME);
-//
-//        if (resourceFile != null && resourceFile.exists()) {
-//            Reader fr = new FileReader(resourceFile);
-//            map = yaml.load(fr);
-//            fr.close();
-//        }
-//
-//        if (map == null)
-//            map = new HashMap<>();
 
-        FileObject fileObject = filer.getResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml");
-        Reader reader = fileObject.openReader(true);
-        map = (Map<String, Object>) yaml.loadAs(reader, Map.class);
-        reader.close();
-        ((JavacFiler) filer).close();
+        try {
+            FileObject fileObject = filer.getResource(Config.CONFIG_LOCATION, "", "plugin.yml");
+
+            Reader reader = fileObject.openReader(true);
+            map = (Map<String, Object>) yaml.loadAs(reader, Map.class);
+            reader.close();
+            ((JavacFiler) filer).close();
+
+        } catch (IOException ignored) {}
+
+        if (map == null)
+            map = new HashMap<>();
 
         return map;
-    }
-
-    // ToDo: Diese dumme Scheiße muss weg.
-    private File getResourceFile(Element element, String srcPath, String resourcePath, String relativePath) {
-        Field field = null;
-        String fullPath = "";
-        try {
-            field = element.getClass().getField("sourcefile");
-            field.setAccessible(true);
-            Method method = field.get(element).getClass().getMethod("getName");
-            method.setAccessible(true);
-            fullPath = (String) method.invoke(field.get(element));
-        } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        int pos = fullPath.replace('\\', '/').indexOf(srcPath);
-        if (pos == -1) {
-//            throw new ProcessingException(String.format("Can't parse annotation for %s. Did you forget to set srcPath or resourcePath?",
-//                    element.toString()));
-            return null;
-        }
-
-        String mainPath = fullPath.substring(0, pos);
-
-        return new File(mainPath + resourcePath + relativePath);
     }
 
 }

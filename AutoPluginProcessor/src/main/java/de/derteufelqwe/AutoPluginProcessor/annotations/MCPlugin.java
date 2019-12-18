@@ -10,6 +10,4 @@ public @interface MCPlugin {
     String description() default "";
     String prefix() default "";
 
-    String srcPath() default "src/main/java/";
-    String resourcePath() default "src/main/resources/";
 }

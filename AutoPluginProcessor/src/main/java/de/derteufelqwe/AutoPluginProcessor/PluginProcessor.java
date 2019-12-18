@@ -32,10 +32,11 @@ import java.util.stream.Collectors;
 @AutoService(Processor.class)
 public class PluginProcessor extends BetterProcessor {
 
-    private JavaFileManager.Location pluginLocation = StandardLocation.CLASS_OUTPUT;
-    private Map<String, Object> yamlContent = new HashMap<>();
+
     private Yaml yaml = getYAML();
     private Gson gson = getGson();
+
+    private Map<String, Object> yamlContent = new HashMap<>();
     private Set<String> annotatedFiles = new HashSet<>();
     private Set<Class<? extends Annotation>> supportedAnnotations = getSupportedAnnotationClasses();
 
@@ -46,6 +47,7 @@ public class PluginProcessor extends BetterProcessor {
                 .map(Class::getCanonicalName)
                 .collect(Collectors.toSet());
     }
+
 
     private Set<Class<? extends Annotation>> getSupportedAnnotationClasses() {
         Set<Class<? extends Annotation>> set = new LinkedHashSet<>();
@@ -66,33 +68,29 @@ public class PluginProcessor extends BetterProcessor {
     }
 
 
+    /**
+     * Load the cache if possible
+     */
     @Override
     public void setup() {
-        note("NOTE");
-        warning("XWARNING");
-        try {
-            try {
-                FileObject file = filer.getResource(StandardLocation.SOURCE_OUTPUT, "", Config.CACHE_FILE_NAME);
-                Reader reader = file.openReader(true);
-                annotatedFiles = (Set<String>) gson.fromJson(reader, Set.class);
-                reader.close();
-                ((JavacFiler) filer).close();
-            } catch (FileNotFoundException ignored) {
-            }
 
-        } catch (IOException e) {
-            throw new ProcessingException("Failed to create resource %s: %s", Config.CONFIG_FILE_NAME, e.getMessage());
-        }
+        try {
+            FileObject file = filer.getResource(Config.CACHE_LOCATION, "", Config.CACHE_FILE_NAME);
+            Reader reader = file.openReader(true);
+            annotatedFiles = (Set<String>) gson.fromJson(reader, Set.class);
+            reader.close();
+            ((JavacFiler) filer).close();
+        } catch (IOException ignored) {}
 
         getAndProcessCachedFiles(new HashSet<>());
     }
 
     /**
      * Parse the new elements together with the already existing elements to create a Set of existing
-     * and properly annotated classes.
+     * and properly annotated classes. 'annotatedFiles' will be updated.
      *
      * @param elements Elements of this round
-     * @return Set of elements which exist and have atleast one annotation from 'supportedAnnotations'
+     * @return Set of elements which exist and have at least one annotation from 'supportedAnnotations'
      */
     private Set<Element> getAndProcessCachedFiles(Set<? extends Element> elements) {
         Set<Element> resSet = new HashSet<>();
@@ -158,28 +156,32 @@ public class PluginProcessor extends BetterProcessor {
     }
 
 
+    /**
+     * Saves the cache and the plugin.yml
+     */
     @Override
     public synchronized void finish() {
         try {
-            FileObject outputFile = filer.createResource(pluginLocation, "", Config.CONFIG_FILE_NAME);
+            FileObject outputFile = filer.createResource(Config.CONFIG_LOCATION, "", Config.CONFIG_FILE_NAME);
             Writer writer = outputFile.openWriter();
             yaml.dump(yamlContent, writer);
             writer.close();
         } catch (IOException e) {
-            throw new ProcessingException("Failed to write content to file '%s': %s", Config.CONFIG_FILE_NAME, e.getMessage());
+            throw new ProcessingException("Failed to save plugin.yml. %s", e.getMessage());
         }
 
         try {
-            FileObject file = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", Config.CACHE_FILE_NAME);
+            FileObject file = filer.createResource(Config.CACHE_LOCATION, "", Config.CACHE_FILE_NAME);
             Writer writer = file.openWriter();
             gson.toJson(annotatedFiles, writer);
             writer.close();
         } catch (IOException e) {
-            throw new ProcessingException("Failed to save cache. " + e.getMessage());
+            throw new ProcessingException("Failed to save cache. %s", e.getMessage());
         }
 
         ((JavacFiler) filer).close();
     }
+
 
     private Yaml getYAML() {
         DumperOptions options = new DumperOptions();
