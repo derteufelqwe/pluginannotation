@@ -1,6 +1,7 @@
 package de.derteufelqwe.AutoPluginTest.commands;
 
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCCommand;
+import de.derteufelqwe.AutoPluginProcessor.annotations.MCDontIgnore;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCTabComplete;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//@MCTabComplete("cmd1")
-//@MCCommand(command = "cmd1", description = "Command 2")
+@MCTabComplete("cmd1")
+@MCCommand(command = "cmd1", description = "Command 2")
+@MCDontIgnore
 public class Command1 implements CommandExecutor, TabCompleter {
 
     @Override

@@ -95,7 +95,7 @@ public class MCPluginParser extends Parser {
         Map<String, Object> map = new HashMap<>();
 
         try {
-            FileObject fileObject = filer.getResource(Config.CONFIG_LOCATION, "", "plugin.yml");
+            FileObject fileObject = filer.getResource(Config.CONFIG_LOCATION, "", Config.CONFIG_FILE_NAME);
 
             Reader reader = fileObject.openReader(true);
             map = (Map<String, Object>) yaml.loadAs(reader, Map.class);

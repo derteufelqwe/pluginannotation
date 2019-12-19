@@ -43,9 +43,14 @@ public class PluginProcessor extends BetterProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return getSupportedAnnotationClasses().stream()
+        Set<String> set = getSupportedAnnotationClasses().stream()
                 .map(Class::getCanonicalName)
                 .collect(Collectors.toSet());
+
+        // Added here, since it's not really a valid annotation but only used to notify the AP about a class
+        set.add(MCDontIgnore.class.getCanonicalName());
+
+        return set;
     }
 
 
@@ -162,7 +167,7 @@ public class PluginProcessor extends BetterProcessor {
     @Override
     public synchronized void finish() {
         try {
-            FileObject outputFile = filer.createResource(Config.CONFIG_LOCATION, "", Config.CONFIG_FILE_NAME);
+            FileObject outputFile = filer.createResource(Config.CONFIG_OUT_LOCATION, "", Config.CONFIG_FILE_OUT_NAME);
             Writer writer = outputFile.openWriter();
             yaml.dump(yamlContent, writer);
             writer.close();
