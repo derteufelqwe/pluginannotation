@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @MCTabComplete("cmd1")
-@MCCommand(command = "cmd1", description = "Command 2")
+@MCCommand(command = "cmd1", description = "Command 2", aliases = "c1")
 @MCDontIgnore
 public class Command1 implements CommandExecutor, TabCompleter {
 

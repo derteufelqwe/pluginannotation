@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 public @interface MCCommand {
     String command();
     String description() default "";
+    String[] aliases() default "";
     String permission() default "";
     String permissionMessage() default "";
     String usage() default "";

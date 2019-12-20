@@ -38,6 +38,8 @@ public class MCCommandParser extends Parser {
             subCfgMap.put("permission-message", annotation.permissionMessage());
         if (!annotation.usage().equals(""))
             subCfgMap.put("usage", annotation.usage());
+        if (annotation.aliases().length > 0 && !annotation.aliases()[0].equals(""))
+            subCfgMap.put("aliases", annotation.aliases());
 
         map.put(annotation.command(), subCfgMap);
 
