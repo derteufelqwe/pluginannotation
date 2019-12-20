@@ -1,4 +1,4 @@
-#1 AutoPluginYML
+# AutoPluginYML
 AutoPluginYML is an annotation processor which mainly creates the plugin.yml for you as well as 
 removes some boilerplate code like registering commands and listeners in Java.
 It also checks if inputs like your plugin name match spigots name requirements and throw errors
@@ -6,7 +6,7 @@ at compile time if you use something incorrectly.
 
 AutoPluginTestPlugin is an example project using AutoPluginYML.
 
-#2 Where to find which values
+# Where to find which values
 
 | Value        | Annotation |
 | ------------- |:-------------|
@@ -59,11 +59,11 @@ compile time, so just ignore the error.
 To get rid if this error you need to mark the directory where the class is generated as a 
 'generated sources root' so your IDE will find the class.
 
-#3 Commands
+# Commands
 Classes implementing `CommandExecutor` can be registered using the `@MCCommand` annotation.
 Using the `new AutoRegister.generate(this)` will automatically register them in Java as well.
 
-#4 Listeners
+# Listeners
 Classes implementing `Listener` can be registered using the `@MCListener` annotation.
 Using the `new AutoRegister.generate(this)` will automatically register them in Java as well.
 
@@ -78,7 +78,7 @@ If you now remove the `@MCCommand` annotation and recompile the project the AP w
 plugin.yml unless your compilation includes another `@MC...` annotation. To prevent errors and constant 
 full recompilations you can add `@MCDontIgnore` to the class to tell the AP that there is a class.
 
-#6 Boundaries
+# Boundaries
 - You need to have at least one annotated class in your compilation, otherwise the Annotation
 Processor won't get called. This means that you can't just change a value in your plugin.yml and 
 build without any changes to your annotated classes. If there are no changes to your classes you 

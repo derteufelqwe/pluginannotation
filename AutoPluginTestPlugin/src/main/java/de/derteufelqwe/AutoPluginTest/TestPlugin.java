@@ -1,8 +1,6 @@
 package de.derteufelqwe.AutoPluginTest;
 
 import de.derteufelqwe.AutoPlugin.AutoRegister;
-import de.derteufelqwe.AutoPluginProcessor.annotations.MCAPIVersion;
-import de.derteufelqwe.AutoPluginProcessor.annotations.MCAuthor;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCLoadBefore;
 import de.derteufelqwe.AutoPluginProcessor.annotations.MCPlugin;
 import org.bukkit.plugin.java.JavaPlugin;
